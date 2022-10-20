@@ -1,1 +1,3 @@
-<img src={props.weatherobjwrapper.weatherobj[key].imageurl} alt="Good"/>
+weatherwidget  update state when:
+   state is empty
+   button is clicked

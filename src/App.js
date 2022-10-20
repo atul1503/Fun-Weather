@@ -110,10 +110,10 @@ function WeatherWidget(props) {
 
   function showweatherdata(e){
 
-    if( props.weatherdata.name===weatherobjwrapper.weatherobj.City['text']  ){
     
-      if(!e) {return}
-    }
+    if( Object.keys(weatherobjwrapper.weatherobj).length===0){}
+    else if(e){}
+    else{ return; }
 
 
     var obj={
@@ -133,11 +133,16 @@ function WeatherWidget(props) {
 
   function showwinddata(e) {
     var obj={
-      City: props.weatherdata.name,
-      WindSpeed: props.weatherdata.wind.speed,
-      Degree: props.weatherdata.wind.deg,
+      City: { imageurl: "",text: props.weatherdata.name},
+      WindSpeed: {imageurl: "",text: props.weatherdata.wind.speed},
+      Degree: { imageurl: "",text: props.weatherdata.wind.deg},
     }
 
+    var isAnyImageLoaded=false;
+      Object.keys(obj).forEach(function(key,i){
+        if(obj[key].imageurl!=="") isAnyImageLoaded=true;
+      })
+      if(!isAnyImageLoaded) setImages(obj);
     setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj});
   }
 
