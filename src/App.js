@@ -42,7 +42,7 @@ class App extends Component {
     <h1> Welcome. Enter your city name </h1>
     <SearchBox cityname={this.state.city} AppStatehandler={this.AppStatehandler.bind(this)}/>
     <h3>The weather in your area is described below</h3>
-    <WeatherWidget weatherdata={this.state.weatherdata}/>
+    <WeatherWidget   weatherdata={this.state.weatherdata}/>
     </div>
     );
 
@@ -113,6 +113,7 @@ function WeatherWidget(props) {
     
     if( Object.keys(weatherobjwrapper.weatherobj).length===0){}
     else if(e){}
+    else if(props.weatherdata.name!==weatherobjwrapper.weatherobj.City.text){}
     else{ return; }
 
 
@@ -161,7 +162,7 @@ function WeatherWidget(props) {
   
   function Conditionalimagerender(props){
     if(props.obj[props.bkey].imageurl==="") return(<img alt="Nothing found" />); 
-    return (<img src={props.obj[props.bkey].imageurl} alt="Good"/>);
+    return (<img src={props.obj[props.bkey].imageurl} width="500" height="300" alt="Good"/>);
   }   
 
   function DisplayData(props) {
