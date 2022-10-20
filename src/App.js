@@ -91,30 +91,28 @@ function WeatherWidget(props) {
   const [weatherobjwrapper,setweatherobjwrapper]= useState({weatherobj:{},prevobj: {}});
 
 
-
   if(Object.keys(props.weatherdata).length===0) {return}
 
 
+
   function setImages(obj){
-    var keysarr=Object.keys(obj);
-    for(var key in keysarr){
-      var keyword=obj[keysarr[key]].text;
-      fetch("https://api.pexels.com/v1/search?query="+keyword+"&per_page=1",{headers: {Authorization: pexelsid}})
+    Object.keys(obj).forEach(function(key,index){
+      fetch("https://api.pexels.com/v1/search?query="+obj[key].text+"&per_page=1",{headers: {Authorization: pexelsid}})
       .then(res=> res.json())
       .then(data => {
-        obj[keysarr[key]].imageurl=data.photos[0].url;
+        if(data.photos.length>0)  obj[key].imageurl=data.photos[0].src.original;
         setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj})
       });
-    }    
+     });   
   }
 
 
 
   function showweatherdata(e){
 
-    if( Object.keys(weatherobjwrapper.weatherobj).length!==0 &&  props.weatherdata.name===weatherobjwrapper.weatherobj.City['text']){
+    if( props.weatherdata.name===weatherobjwrapper.weatherobj.City['text']  ){
     
-      if(!e) {return;}
+      if(!e) {return}
     }
 
 
@@ -123,11 +121,15 @@ function WeatherWidget(props) {
       Type: {imageurl:"",text: props.weatherdata.weather[0].main},
       Temperature: {imageurl:"",text: (props.weatherdata.main.temp-273.15).toFixed(2)}
     }
-      
-       setImages(obj);
+    var isAnyImageLoaded=false;
+      Object.keys(obj).forEach(function(key,i){
+        if(obj[key].imageurl!=="") isAnyImageLoaded=true;
+      })
+      if(!isAnyImageLoaded) setImages(obj);
        setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj});
-    
   }
+
+
 
   function showwinddata(e) {
     var obj={
@@ -151,19 +153,25 @@ function WeatherWidget(props) {
 
   )
 
+  
+  function Conditionalimagerender(props){
+    if(props.obj[props.bkey].imageurl==="") return(<img alt="Nothing found" />); 
+    return (<img src={props.obj[props.bkey].imageurl} alt="Good"/>);
+  }   
 
   function DisplayData(props) {
 
+     
     
-
     //props.weatherobjwrapper
     return(
       <div>
         {Object.keys(props.weatherobjwrapper.weatherobj).map(function(key){
           return (
             <div>
-              <img src={props.weatherobjwrapper.weatherobj[key].imageurl} alt="Good"/>
-              <p> {key} = {props.weatherobjwrapper.weatherobj[key]}</p>
+              <Conditionalimagerender bkey={key} obj={props.weatherobjwrapper.weatherobj}/>
+              
+              <p> {key} = {props.weatherobjwrapper.weatherobj[key].text}</p>
             </div>
           )
         })}
@@ -174,6 +182,10 @@ function WeatherWidget(props) {
 
 
 }
+
+
+
+
 
 
 export default App;
