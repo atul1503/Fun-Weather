@@ -90,13 +90,18 @@ function WeatherWidget(props) {
 
   const [weatherobjwrapper,setweatherobjwrapper]= useState({weatherobj:{},prevobj: {}});
 
+  if( Object.keys(props.weatherdata).length===0 ) return(<p>Sorry. City or location not found.</p>);
+  if( props.weatherdata.cod==='404' ) return(<p>Sorry. City or location not found.</p>);
+ 
+
 
   if(Object.keys(props.weatherdata).length===0) {return}
 
 
 
-  function setImages(obj){
+  function setImages(obj,oldcity){
     Object.keys(obj).forEach(function(key,index){
+      if(oldcity===obj.City.text && key===oldcity){return}
       fetch("https://api.pexels.com/v1/search?query="+obj[key].text+"&per_page=1",{headers: {Authorization: pexelsid}})
       .then(res=> res.json())
       .then(data => {
@@ -143,7 +148,7 @@ function WeatherWidget(props) {
       Object.keys(obj).forEach(function(key,i){
         if(obj[key].imageurl!=="") isAnyImageLoaded=true;
       })
-      if(!isAnyImageLoaded) setImages(obj);
+      if(!isAnyImageLoaded) setImages(obj,weatherobjwrapper.weatherobj.City.text);
     setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj});
   }
 
