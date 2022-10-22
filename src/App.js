@@ -40,7 +40,8 @@ class App extends Component {
     
     return ( 
     <div>
-    <h1> Welcome. Enter your city name </h1>
+    <h1> Welcome. </h1>
+    <p>Explore weather of the world</p>
     <SearchBox cityname={this.state.city} AppStatehandler={this.AppStatehandler.bind(this)}/>
     <h3>The weather in your area is described below</h3>
     <WeatherWidget   weatherdata={this.state.weatherdata}/>
@@ -143,8 +144,8 @@ function WeatherWidget(props) {
   function showwinddata(e) {
     var obj={
       City: { imageurl: "",text: props.weatherdata.name},
-      WindSpeed: {imageurl: "",text: props.weatherdata.wind.speed},
-      Degree: { imageurl: "",text: props.weatherdata.wind.deg},
+      WindSpeed: {imageurl: "",text: props.weatherdata.wind.speed+"m/s"},
+      Degree: { imageurl: "",text: props.weatherdata.wind.deg+"°"},
     }
 
     var isAnyImageLoaded=false;
