@@ -25,7 +25,7 @@
 
 #flex-box-item {
   flex-grow: 1;
-  flex-wrap: wrap;
+  width:33.33%;
 }
 
 @media (prefers-reduced-motion: no-preference) {

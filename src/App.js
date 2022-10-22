@@ -79,9 +79,9 @@ class  SearchBox extends Component {
   render() {
 
   return (
-    <div>
-    <input type="text" onChange={this.updatesearchtext}></input>
-    <button style={{height:"30px", width:"150px"}} onClick={this.changeeffect}>Check weather</button>
+    <div id="flex-box-container">
+    <input id="flex-box-item"  style={{type: "text"}} onChange={this.updatesearchtext}></input>
+    <button id="flex-box-item" style={{height:"30px",width: "200px"}} onClick={this.changeeffect}>Check weather</button>
     </div>
   )
 }
@@ -103,7 +103,9 @@ function WeatherWidget(props) {
   function setImages(obj,oldcity){
     Object.keys(obj).forEach(function(key,index){
       if(oldcity===obj.City.text && key===oldcity){return}
-      fetch("https://api.pexels.com/v1/search?query="+obj[key].text+"&per_page=1",{headers: {Authorization: pexelsid}})
+      var keyword=obj[key].text;
+      if(key==="Temperature") {keyword=key}
+      fetch("https://api.pexels.com/v1/search?query="+keyword+"&per_page=1",{headers: {Authorization: pexelsid}})
       .then(res=> res.json())
       .then(data => {
         if(data.photos.length>0)  obj[key].imageurl=data.photos[0].src.original;
@@ -126,7 +128,7 @@ function WeatherWidget(props) {
     var obj={
       City: {imageurl:"", text: props.weatherdata.name},
       Type: {imageurl:"",text: props.weatherdata.weather[0].main},
-      Temperature: {imageurl:"",text: (props.weatherdata.main.temp-273.15).toFixed(2)+" degree celsius"}
+      Temperature: {imageurl:"",text: (props.weatherdata.main.temp-273.15).toFixed(2)+" °C"}
     }
     var isAnyImageLoaded=false;
       Object.keys(obj).forEach(function(key,i){
@@ -169,8 +171,8 @@ function WeatherWidget(props) {
 
   
   function Conditionalimagerender(props){
-    if(props.obj[props.bkey].imageurl==="")  return(<img src={nothingfound} width="200" height="300" alt="Nothing found" />); 
-    return (<img src={props.obj[props.bkey].imageurl} width="500" height="300" alt="Good"/>);
+    if(props.obj[props.bkey].imageurl==="")  return(<img src={nothingfound}  height="300" alt="Nothing found" />); 
+    return (<img src={props.obj[props.bkey].imageurl}  height="300" alt="Good"/>);
   }   
 
   function DisplayData(props) {
@@ -185,7 +187,7 @@ function WeatherWidget(props) {
             <div id="flex-box-item">
               <Conditionalimagerender bkey={key} obj={props.weatherobjwrapper.weatherobj}/>
               
-              <p> {key} = {props.weatherobjwrapper.weatherobj[key].text}</p>
+              <p> {props.weatherobjwrapper.weatherobj[key].text}</p>
             </div>
           )
         })}
