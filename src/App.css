@@ -9,7 +9,6 @@
 
 #weather-options {
 
-  float: left;
   width: 100px;
   margin: auto;
   text-align: center;
@@ -17,6 +16,16 @@
   border-radius: 5%;
   border-width: 2px;
   
+}
+
+#flex-box-container {
+
+  display: flex;
+}
+
+#flex-box-item {
+  flex-grow: 1;
+  flex-wrap: wrap;
 }
 
 @media (prefers-reduced-motion: no-preference) {

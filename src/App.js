@@ -1,5 +1,6 @@
 
 import './App.css';
+import nothingfound from './nothingfound.jpg'
 import React, { Component, useState } from 'react';
 import { openweatherid, pexelsid } from './cred';
 
@@ -125,7 +126,7 @@ function WeatherWidget(props) {
     var obj={
       City: {imageurl:"", text: props.weatherdata.name},
       Type: {imageurl:"",text: props.weatherdata.weather[0].main},
-      Temperature: {imageurl:"",text: (props.weatherdata.main.temp-273.15).toFixed(2)}
+      Temperature: {imageurl:"",text: (props.weatherdata.main.temp-273.15).toFixed(2)+" degree celsius"}
     }
     var isAnyImageLoaded=false;
       Object.keys(obj).forEach(function(key,i){
@@ -156,17 +157,19 @@ function WeatherWidget(props) {
   return (
     //<p> { JSON.stringify(props.weatherdata) } </p>
     <div>
+      <div id="flex-box-container">
     <p id="weather-options" onClick={showweatherdata}>Weather</p>
     <p id="weather-options" onClick={showwinddata}>Wind</p>
+    </div>
     <br></br>
-    <DisplayData weatherobjwrapper={weatherobjwrapper} />
+    <DisplayData  weatherobjwrapper={weatherobjwrapper} />
     </div>
 
   )
 
   
   function Conditionalimagerender(props){
-    if(props.obj[props.bkey].imageurl==="") return(<img alt="Nothing found" />); 
+    if(props.obj[props.bkey].imageurl==="")  return(<img src={nothingfound} width="200" height="300" alt="Nothing found" />); 
     return (<img src={props.obj[props.bkey].imageurl} width="500" height="300" alt="Good"/>);
   }   
 
@@ -176,10 +179,10 @@ function WeatherWidget(props) {
     
     //props.weatherobjwrapper
     return(
-      <div>
+      <div id="flex-box-container">
         {Object.keys(props.weatherobjwrapper.weatherobj).map(function(key){
           return (
-            <div>
+            <div id="flex-box-item">
               <Conditionalimagerender bkey={key} obj={props.weatherobjwrapper.weatherobj}/>
               
               <p> {key} = {props.weatherobjwrapper.weatherobj[key].text}</p>
