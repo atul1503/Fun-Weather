@@ -1,0 +1,2 @@
+Use Object.assign({},obj) to create deepcopy of obj object.
+Use this copy object to modify state.
