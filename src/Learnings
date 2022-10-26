@@ -1,2 +1,5 @@
 Use Object.assign({},obj) to create deepcopy of obj object.
 Use this copy object to modify state.
+
+
+if you want to help two sibling components communicate with data in react then make that data a state in the parent and pass state change callback functions to that siblings who will act as the source of data(since it will modify the data) and in the other sibling refernce the state data for information retrieval.
