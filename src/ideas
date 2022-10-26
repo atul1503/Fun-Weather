@@ -1,3 +1,5 @@
-weatherwidget  update state when:
-   state is empty
-   button is clicked
+change setimages signature
+pass whoisclicked parama to setimages calls.
+
+
+change all calls to setimages

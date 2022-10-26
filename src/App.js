@@ -40,8 +40,8 @@ class App extends Component {
     
     return ( 
     <div>
-    <h1> Welcome. </h1>
-    <p>Explore weather of the world</p>
+    <h1> FunWeather.- </h1>
+    <p>explore weather of the world</p>
     <SearchBox cityname={this.state.city} AppStatehandler={this.AppStatehandler.bind(this)}/>
     <h3>The weather in your area is described below</h3>
     <WeatherWidget   weatherdata={this.state.weatherdata}/>
@@ -90,7 +90,7 @@ class  SearchBox extends Component {
 
 function WeatherWidget(props) {
 
-  const [weatherobjwrapper,setweatherobjwrapper]= useState({weatherobj:{},prevobj: {}});
+  const [weatherobjwrapper,setweatherobjwrapper]= useState({weatherobj:{},whoisclicked:""});
 
   if( Object.keys(props.weatherdata).length===0 ) return(<p>Sorry. City or location not found.</p>);
   if( props.weatherdata.cod==='404' ) return(<p>Sorry. City or location not found.</p>);
@@ -101,7 +101,7 @@ function WeatherWidget(props) {
 
 
 
-  function setImages(obj,oldcity){
+  function setImages(obj,whoisclicked,oldcity){
     Object.keys(obj).forEach(function(key,index){
       if(oldcity===obj.City.text && key===oldcity){return}
       var keyword=obj[key].text;
@@ -110,7 +110,10 @@ function WeatherWidget(props) {
       .then(res=> res.json())
       .then(data => {
         if(data.photos.length>0)  obj[key].imageurl=data.photos[0].src.original;
-        setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj})
+        var stateobj=Object.create(weatherobjwrapper);
+        stateobj.weatherobj=obj;
+        stateobj.whoisclicked=whoisclicked;
+        setweatherobjwrapper(stateobj);
       });
      });   
   }
@@ -135,8 +138,7 @@ function WeatherWidget(props) {
       Object.keys(obj).forEach(function(key,i){
         if(obj[key].imageurl!=="") isAnyImageLoaded=true;
       })
-      if(!isAnyImageLoaded) setImages(obj);
-       setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj});
+      if(!isAnyImageLoaded) setImages(obj,"weather");
   }
 
 
@@ -152,18 +154,28 @@ function WeatherWidget(props) {
       Object.keys(obj).forEach(function(key,i){
         if(obj[key].imageurl!=="") isAnyImageLoaded=true;
       })
-      if(!isAnyImageLoaded) setImages(obj,weatherobjwrapper.weatherobj.City.text);
-    setweatherobjwrapper({weatherobj: obj,prevobj: weatherobjwrapper.weatherobj});
+      if(!isAnyImageLoaded) setImages(obj,"wind",weatherobjwrapper.weatherobj.City.text);
   }
 
+  function Stylewrapper(){
+    if(weatherobjwrapper.whoisclicked==="weather" || weatherobjwrapper.whoisclicked==="" )  return (
+      <div id="flex-box-container">
+      <p id="weather-options" style={{backgroundColor: 'pink', color: 'white'}} onClick={showweatherdata}>Weather</p>
+    <p id="weather-options" style={{backgroundColor: 'black', color: 'white'}} onClick={showwinddata}>Wind</p>
+    </div>
+    );
+    else return(
+      <div id="flex-box-container">
+      <p id="weather-options" style={{backgroundColor: 'black', color: 'white'}} onClick={showweatherdata}>Weather</p>
+    <p id="weather-options"  style={{backgroundColor: 'pink', color: 'white'}} onClick={showwinddata}>Wind</p>
+    </div>
+    );
+  }
   showweatherdata();
   return (
-    //<p> { JSON.stringify(props.weatherdata) } </p>
     <div>
-      <div id="flex-box-container">
-    <p id="weather-options" onClick={showweatherdata}>Weather</p>
-    <p id="weather-options" onClick={showwinddata}>Wind</p>
-    </div>
+      
+        {Stylewrapper()}
     <br></br>
     <DisplayData  weatherobjwrapper={weatherobjwrapper} />
     </div>
